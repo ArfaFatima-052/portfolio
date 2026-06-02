@@ -1,30 +1,604 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>My Portfolio</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Arfa Fatima · Software Engineering Portfolio</title>
+    <!-- Google Fonts & Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #faf9fc;
+            color: #1e1a2f;
+            line-height: 1.5;
+            transition: background 0.25s ease, color 0.2s ease;
+        }
+
+        /* Dark mode styling */
+        body.dark {
+            background: #0e0c17;
+            color: #e9eaf5;
+        }
+
+        body.dark .card,
+        body.dark .timeline-card,
+        body.dark .skill-chip,
+        body.dark .interest-chip,
+        body.dark .project-card {
+            background: #1e1a2f;
+            color: #eef0ff;
+            box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.4);
+        }
+
+        body.dark .skill-chip {
+            background: #2d2a44;
+        }
+
+        body.dark .interest-chip {
+            background: #2e2a3e;
+            border-color: #4c4768;
+        }
+
+        body.dark .footer {
+            border-top-color: #2a2740;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 1.8rem 2rem 3rem;
+        }
+
+        /* toggle btn */
+        .theme-toggle {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: #ffffffd9;
+            backdrop-filter: blur(8px);
+            border: 1px solid #ddd;
+            border-radius: 60px;
+            padding: 0.7rem 1rem;
+            cursor: pointer;
+            font-size: 1.3rem;
+            z-index: 99;
+            box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+            transition: 0.2s;
+        }
+
+        body.dark .theme-toggle {
+            background: #2d2a44e6;
+            border-color: #53507a;
+            color: #ffea80;
+        }
+
+        /* header */
+        .hero {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            gap: 1.5rem;
+            background: transparent;
+        }
+        .hero-info h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #2b2d77, #8b5cf6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        body.dark .hero-info h1 {
+            background: linear-gradient(135deg, #b9a9ff, #d9c6ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .badge-title {
+            display: inline-block;
+            background: #e9e5ff;
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin: 0.75rem 0 0.5rem;
+            color: #4b2e8b;
+        }
+        body.dark .badge-title {
+            background: #342f55;
+            color: #cfc5ff;
+        }
+        .contact-info {
+            background: #ffffffcc;
+            backdrop-filter: blur(4px);
+            border-radius: 32px;
+            padding: 1rem 1.6rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+        }
+        body.dark .contact-info {
+            background: #1a172bb3;
+        }
+        .contact-info a, .contact-info span {
+            color: #2c2b3c;
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        body.dark .contact-info a, body.dark .contact-info span {
+            color: #ddd6ff;
+        }
+        .contact-info i {
+            width: 1.25rem;
+        }
+
+        .about-card {
+            background: white;
+            border-radius: 2rem;
+            padding: 1.8rem;
+            margin: 2rem 0 2rem;
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.05);
+            transition: 0.2s;
+        }
+
+        /* sections */
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 2rem 0 1.2rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            border-left: 5px solid #8b5cf6;
+            padding-left: 1rem;
+        }
+
+        /* education timeline */
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            margin-bottom: 2rem;
+        }
+        .timeline-card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1.4rem 1.6rem;
+            transition: all 0.2s;
+            box-shadow: 0 5px 14px rgba(0,0,0,0.03);
+            border: 1px solid #edeef5;
+        }
+        .timeline-card h3 {
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+        .edu-date {
+            font-size: 0.8rem;
+            color: #6f6c8c;
+            margin-top: 0.3rem;
+            display: inline-block;
+            background: #f0eff8;
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+        }
+        body.dark .edu-date {
+            background: #2f2b4b;
+            color: #b9afef;
+        }
+
+        /* projects grid */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+            gap: 1.8rem;
+            margin: 1.5rem 0 2rem;
+        }
+        .project-card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            transition: all 0.25s;
+            box-shadow: 0 12px 26px -12px rgba(0, 0, 0, 0.08);
+            border: 1px solid #f0eff6;
+        }
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 22px 32px -16px rgba(98, 49, 209, 0.15);
+        }
+        .project-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-bottom: 0.8rem;
+        }
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0 0.8rem;
+        }
+        .tech-badge {
+            background: #efeaff;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0.25rem 0.8rem;
+            border-radius: 30px;
+            letter-spacing: 0.3px;
+            color: #4a2e8f;
+        }
+        body.dark .tech-badge {
+            background: #35305a;
+            color: #cfc2ff;
+        }
+        .project-desc {
+            font-size: 0.9rem;
+            opacity: 0.85;
+        }
+
+        /* skills & interests */
+        .skillset-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin: 1rem 0 2rem;
+        }
+        .skill-box, .interest-box {
+            flex: 1;
+            min-width: 220px;
+            background: rgba(255,255,255,0.5);
+            border-radius: 1.6rem;
+            padding: 1rem 0 1rem 0;
+        }
+        .skill-chip {
+            background: #ffffff;
+            display: inline-block;
+            margin: 0.4rem 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 60px;
+            font-weight: 500;
+            font-size: 0.85rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+            border: 1px solid #e8e5f2;
+        }
+        .interest-chip {
+            background: #f7f5ff;
+            display: inline-block;
+            margin: 0.4rem 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 60px;
+            font-weight: 500;
+            font-size: 0.85rem;
+            border: 1px solid #e2dcf5;
+        }
+        .footer {
+            margin-top: 4rem;
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #e2e0ec;
+            font-size: 0.85rem;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .btn-resume {
+            background: #1e1a2f;
+            border: none;
+            padding: 0.6rem 1.4rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        body.dark .btn-resume {
+            background: #8b75d6;
+            color: #0e0b18;
+        }
+        .btn-resume:hover {
+            background: #4c38a0;
+            transform: scale(0.97);
+        }
+        @media (max-width: 700px) {
+            .container {
+                padding: 1rem 1.2rem 2rem;
+            }
+            .hero-info h1 {
+                font-size: 2.3rem;
+            }
+            .section-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>Arfa Fatima</h1>
-    <h2>Student Portfolio</h2>
+    <div class="container">
+        <!-- Hero / Header -->
+        <div class="hero">
+            <div class="hero-info">
+                <h1>Arfa Fatima</h1>
+                <div class="badge-title">
+                    <i class="fas fa-laptop-code"></i> Software Engineer (5th Semester)
+                </div>
+                <p style="max-width: 550px; margin-top: 0.5rem;">Building innovative solutions — curious, motivated, and team-driven.</p>
+            </div>
+            <div class="contact-info">
+                <span><i class="fas fa-phone-alt"></i> +92 327 5534591</span>
+                <a href="mailto:arfafatima2006@gmail.com"><i class="fas fa-envelope"></i> arfafatima2006@gmail.com</a>
+                <span><i class="fas fa-map-marker-alt"></i> Taxila Cantt, Hassan Colony</span>
+            </div>
+        </div>
 
-    <p>Hello! I am a Computer Science student.</p>
+        <!-- About Me -->
+        <div class="about-card">
+            <div style="display: flex; gap: 0.8rem; align-items: center; margin-bottom: 0.8rem;">
+                <i class="fas fa-user-astronaut" style="font-size: 1.6rem; color: #8b5cf6;"></i>
+                <h2 style="font-size: 1.4rem;">About Me</h2>
+            </div>
+            <p style="font-size: 1rem; line-height: 1.5;">Curious and motivated Software Engineering student in my 5th semester, with hands-on project experience and a strong mindset for innovation. Skilled at rapid adaptation, fast learning, and excelling in team-driven environments. Eager to gain new skills through an impactful internship and apply them effectively to real-world projects while building future-ready competencies.</p>
+        </div>
 
-    <h3>Skills</h3>
-    <ul>
-        <li>Python</li>
-        <li>Java</li>
-        <li>Assembly Language</li>
-        <li>Web Development</li>
-    </ul>
+        <!-- Education Section -->
+        <div>
+            <div class="section-title">
+                <i class="fas fa-graduation-cap"></i> 
+                <span>Education</span>
+            </div>
+            <div class="timeline">
+                <div class="timeline-card">
+                    <h3>🎓 BS Software Engineering (5th Semester)</h3>
+                    <div>HITEC University, HIT Taxila Cantt.</div>
+                    <div class="edu-date">2023 – Present (Continue)</div>
+                </div>
+                <div class="timeline-card">
+                    <h3>📘 Intermediate of Computer Science (ICS)</h3>
+                    <div>HITEC College For Girls, HIT Taxila Cantt.</div>
+                    <div class="edu-date">2021 – 2023</div>
+                </div>
+                <div class="timeline-card">
+                    <h3>📖 Matriculation</h3>
+                    <div>HITEC Margallah Campus, HIT Taxila Cantt.</div>
+                    <div class="edu-date">Completed 2021</div>
+                </div>
+            </div>
+        </div>
 
-    <h3>Projects</h3>
-    <ul>
-        <li>Crime and Law Enforcement Database System</li>
-        <li>Clinic Management System</li>
-        <li>QR Code Generator & Scanner</li>
-    </ul>
+        <!-- Projects Section -->
+        <div>
+            <div class="section-title">
+                <i class="fas fa-diagram-project"></i>
+                <span>Key Projects</span>
+            </div>
+            <div class="projects-grid">
+                <!-- 1. Restaurant Management System -->
+                <div class="project-card">
+                    <div class="project-title">
+                        <i class="fas fa-utensils"></i> Restaurant Management System
+                    </div>
+                    <div class="project-tech">
+                        <span class="tech-badge">C++</span>
+                        <span class="tech-badge">Balsamiq (UI/UX)</span>
+                    </div>
+                    <div class="project-desc">Developed a complete RMS using C++ and designed wireframes in Balsamiq. Streamlined order & inventory workflows with clean UI/UX prototype.</div>
+                </div>
+                <!-- 2. Online Flight Booking -->
+                <div class="project-card">
+                    <div class="project-title">
+                        <i class="fas fa-plane"></i> Online Flight Booking
+                    </div>
+                    <div class="project-tech">
+                        <span class="tech-badge">Java</span>
+                        <span class="tech-badge">Dijkstra Algorithm</span>
+                    </div>
+                    <div class="project-desc">Java-based flight route optimization using Dijkstra’s algorithm. Efficient shortest path finder with realistic cost metrics.</div>
+                </div>
+                <!-- 3. Tic-Tac-Toe Game -->
+                <div class="project-card">
+                    <div class="project-title">
+                        <i class="fas fa-gamepad"></i> Tic-Tac-Toe
+                    </div>
+                    <div class="project-tech">
+                        <span class="tech-badge">Java</span>
+                    </div>
+                    <div class="project-desc">Interactive console-based Tic-Tac-Toe game with two-player mode, error handling and win detection logic.</div>
+                </div>
+                <!-- 4. Gun-Snake-Water Game -->
+                <div class="project-card">
+                    <div class="project-title">
+                        <i class="fas fa-hand-fist"></i> Gun · Snake · Water
+                    </div>
+                    <div class="project-tech">
+                        <span class="tech-badge">Java</span>
+                        <span class="tech-badge">Strategy Pattern</span>
+                        <span class="tech-badge">Factory Pattern</span>
+                    </div>
+                    <div class="project-desc">Classic hand-game implementation with clean OOP architecture (Strategy + Factory Patterns). Dynamic rule selection and scalable design.</div>
+                </div>
+                <!-- 5. Crime And Law Enforcement (CALE) Web Project -->
+                <div class="project-card">
+                    <div class="project-title">
+                        <i class="fas fa-gavel"></i> Crime & Law Enforcement (CALE)
+                    </div>
+                    <div class="project-tech">
+                        <span class="tech-badge">PHP / MySQL</span>
+                        <span class="tech-badge">XAMPP</span>
+                        <span class="tech-badge">DB Design</span>
+                    </div>
+                    <div class="project-desc">Database-driven web platform for crime record management, case tracking, and law enforcement coordination. Built with relational DB and backend logic.</div>
+                </div>
+            </div>
+        </div>
 
-    <h3>Contact</h3>
-    <p>Email: your-email@example.com</p>
+        <!-- Skills & Expertise + Interests -->
+        <div>
+            <div class="section-title">
+                <i class="fas fa-code"></i>
+                <span>Technical Skills & Tools</span>
+            </div>
+            <div class="skillset-wrap">
+                <div class="skill-box">
+                    <h3 style="margin-bottom: 0.6rem;"><i class="fas fa-palette"></i> Frontend & Design</h3>
+                    <div>
+                        <span class="skill-chip">HTML5/CSS3</span>
+                        <span class="skill-chip">JavaScript (ES6)</span>
+                        <span class="skill-chip">PHP</span>
+                        <span class="skill-chip">Balsamiq</span>
+                        <span class="skill-chip">Figma</span>
+                        <span class="skill-chip">Canva</span>
+                    </div>
+                    <h3 style="margin: 1rem 0 0.6rem;"><i class="fas fa-database"></i> Database & Backend</h3>
+                    <div>
+                        <span class="skill-chip">SQL (MySQL, XAMPP)</span>
+                        <span class="skill-chip">Apache Server</span>
+                        <span class="skill-chip">DB Optimization</span>
+                    </div>
+                    <h3 style="margin: 1rem 0 0.6rem;"><i class="fas fa-mobile-alt"></i> Other Competencies</h3>
+                    <div>
+                        <span class="skill-chip">UI/UX Design</span>
+                        <span class="skill-chip">Graphic Design</span>
+                        <span class="skill-chip">API Integration</span>
+                    </div>
+                </div>
+                <div class="interest-box">
+                    <h3 style="margin-bottom: 0.6rem;"><i class="fas fa-brain"></i> Advanced Interests</h3>
+                    <div>
+                        <span class="interest-chip"><i class="fas fa-robot"></i> NLP</span>
+                        <span class="interest-chip"><i class="fas fa-chart-line"></i> SEO</span>
+                        <span class="interest-chip"><i class="fas fa-cloud-arrow-up"></i> DevOps (Automation/Deployment)</span>
+                        <span class="interest-chip"><i class="fas fa-code-branch"></i> No-Code Dev</span>
+                        <span class="interest-chip"><i class="fas fa-layer-group"></i> API Integration</span>
+                        <span class="interest-chip"><i class="fas fa-universal-access"></i> UI/UX Strategy</span>
+                        <span class="interest-chip"><i class="fas fa-dharmachakra"></i> Design Patterns</span>
+                    </div>
+                    <h3 style="margin: 1.2rem 0 0.6rem;"><i class="fas fa-heart"></i> Curiosities</h3>
+                    <div>
+                        <span class="interest-chip">Natural Language Programming</span>
+                        <span class="interest-chip">Automation & CI/CD</span>
+                        <span class="interest-chip">App Development (no-code/low-code)</span>
+                        <span class="interest-chip">Software Architecture</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact / Resume footer -->
+        <div class="footer">
+            <div>
+                <i class="fas fa-map-pin"></i> Taxila Cantt, Hassan Colony, CB/A-142
+            </div>
+            <div>
+                <button id="resumeBtn" class="btn-resume"><i class="fas fa-download"></i> Download Resume (PDF)</button>
+            </div>
+            <div>
+                <i class="fas fa-envelope-open-text"></i> arfafatima2006@gmail.com
+            </div>
+        </div>
+    </div>
+
+    <button id="darkModeToggle" class="theme-toggle" aria-label="Dark mode toggle">
+        <i class="fas fa-moon"></i> <span style="font-size: 0.75rem;">Dark/Light</span>
+    </button>
+
+    <script>
+        (function() {
+            // Dark/Light mode setup
+            const toggleBtn = document.getElementById('darkModeToggle');
+            const htmlBody = document.body;
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const storedTheme = localStorage.getItem('theme');
+            if (storedTheme === 'dark' || (!storedTheme && prefersDark)) {
+                htmlBody.classList.add('dark');
+            } else if (storedTheme === 'light') {
+                htmlBody.classList.remove('dark');
+            }
+            toggleBtn.addEventListener('click', () => {
+                if (htmlBody.classList.contains('dark')) {
+                    htmlBody.classList.remove('dark');
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    htmlBody.classList.add('dark');
+                    localStorage.setItem('theme', 'dark');
+                }
+            });
+
+            // Simulated Resume Download — elegant alert with download placeholder
+            const resumeButton = document.getElementById('resumeBtn');
+            if (resumeButton) {
+                resumeButton.addEventListener('click', () => {
+                    // Provide an actual resume download as a PDF stub? Since original doc is White simple Sales Representative CV.
+                    // But we'll generate a download of a well-structured resume version based on current portfolio data (as text/PDF friendly)
+                    // To be user-friendly, we generate a .pdf? Actually we can generate a .txt or provide a printable HTML CV.
+                    // However user expects professional: we will generate a data URL containing the full resume content for download.
+                    const resumeContent = `
+                        ARFA FATIMA — SOFTWARE ENGINEER
+                        ===================================
+                        📞 +92 327 5534591  |  ✉ arfafatima2006@gmail.com
+                        📍 Taxila Cantt, Hassan Colony, CB/A-142
+
+                        🎓 EDUCATION
+                        BS Software Engineering (5th Semester) - HITEC University (2023–Present)
+                        Intermediate (ICS) - HITEC College for Girls (2021-2023)
+                        Matriculation - HITEC Margallah Campus
+
+                        💡 ABOUT
+                        Curious and motivated Software Engineering student, hands-on project experience, fast learner, team-driven.
+
+                        🧩 PROJECTS
+                        • Restaurant Management System (C++, Balsamiq UI/UX)
+                        • Online Flight Booking (Java, Dijkstra Algorithm)
+                        • Tic-Tac-Toe Game (Java)
+                        • Gun-Snake-Water Game (Java, Strategy & Factory Patterns)
+                        • Crime And Law Enforcement (CALE) Web Project (PHP/MySQL, DB)
+
+                        🔧 SKILLS
+                        Frontend: HTML, CSS, JavaScript, PHP | Design: Figma, Balsamiq, Canva
+                        Database: SQL, XAMPP/Apache | Interests: NLP, DevOps, SEO, No-Code, API Integration
+                        
+                        📌 INTERESTS: Natural Language Programming, UI/UX Designing, DevOps, Automation, App Development.
+                    `;
+                    const blob = new Blob([resumeContent], { type: 'text/plain' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'Arfa_Fatima_Resume.txt';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                    // Optional toast effect
+                    const originalText = resumeButton.innerHTML;
+                    resumeButton.innerHTML = '<i class="fas fa-check"></i> Downloaded!';
+                    setTimeout(() => {
+                        resumeButton.innerHTML = originalText;
+                    }, 1800);
+                });
+            }
+
+            // Smooth hover effect + any extra polish
+        })();
+    </script>
 </body>
 </html>
